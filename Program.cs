@@ -16,28 +16,27 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+var types = new[]
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    "dog", "cat", "bird", "fish", "turtle", "rabbit", "bat", "rat", "dragon", "butterfly"
 };
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/get-types", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
+    var petTypes =  Enumerable.Range(1,5).Select(index =>
+        new PetType
         (
-            DateTime.Now.AddDays(index),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
+            types[Random.Shared.Next(types.Length)],
+            Random.Shared.Next(0, 100)
         ))
         .ToArray();
-    return forecast;
+    return petTypes;
 })
-.WithName("GetWeatherForecast");
+.WithName("get-types");
 
 app.Run();
 
-record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
+record PetType(string Type, int Amount)
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public int Qty => (Amount - Random.Shared.Next(0, Amount));
 }
